@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<coverage generated="1497552336803" clover="3.2.0">
+  <project timestamp="1497552336803" name="All files">
+    <metrics statements="173" coveredstatements="166" conditionals="94" coveredconditionals="77" methods="14" coveredmethods="14" elements="281" coveredelements="257" complexity="0" loc="173" ncloc="173" packages="1" files="14" classes="14">
+      <file name="auth.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/auth.js">
+        <metrics statements="13" coveredstatements="13" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="11" count="5" type="stmt"/>
+        <line num="12" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="29" count="1" type="stmt"/>
+        <line num="32" count="2" type="stmt"/>
+      </file>
+      <file name="chat.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/chat.js">
+        <metrics statements="16" coveredstatements="16" conditionals="9" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="12" count="8" type="cond" truecount="7" falsecount="0"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="30" count="2" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+        <line num="33" count="2" type="stmt"/>
+      </file>
+      <file name="friend.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/friend.js">
+        <metrics statements="9" coveredstatements="9" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="12" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+      </file>
+      <file name="get_comments.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/get_comments.js">
+        <metrics statements="9" coveredstatements="9" conditionals="5" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="9" count="4" type="cond" truecount="4" falsecount="1"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+      </file>
+      <file name="get_groups.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/get_groups.js">
+        <metrics statements="8" coveredstatements="8" conditionals="5" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="8" count="4" type="cond" truecount="3" falsecount="0"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="2" type="stmt"/>
+      </file>
+      <file name="get_images.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/get_images.js">
+        <metrics statements="7" coveredstatements="7" conditionals="5" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="6" count="1" type="stmt"/>
+        <line num="11" count="4" type="cond" truecount="3" falsecount="0"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="21" count="2" type="stmt"/>
+      </file>
+      <file name="get_posts.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/get_posts.js">
+        <metrics statements="10" coveredstatements="10" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="9" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="23" count="2" type="stmt"/>
+      </file>
+      <file name="get_users.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/get_users.js">
+        <metrics statements="7" coveredstatements="7" conditionals="5" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="8" count="4" type="cond" truecount="3" falsecount="0"/>
+        <line num="10" count="1" type="stmt"/>
+        <line num="11" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+      </file>
+      <file name="gps.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/gps.js">
+        <metrics statements="12" coveredstatements="12" conditionals="5" coveredconditionals="4" methods="1" coveredmethods="1"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="11" count="4" type="cond" truecount="3" falsecount="0"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="26" count="2" type="stmt"/>
+      </file>
+      <file name="groupchat.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/groupchat.js">
+        <metrics statements="15" coveredstatements="15" conditionals="9" coveredconditionals="8" methods="1" coveredmethods="1"/>
+        <line num="4" count="1" type="stmt"/>
+        <line num="11" count="9" type="cond" truecount="8" falsecount="1"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="16" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="19" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="25" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="31" count="5" type="stmt"/>
+        <line num="32" count="5" type="stmt"/>
+        <line num="34" count="2" type="stmt"/>
+      </file>
+      <file name="schedule.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/schedule.js">
+        <metrics statements="12" coveredstatements="5" conditionals="7" coveredconditionals="3" methods="1" coveredmethods="1"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="11" count="4" type="cond" truecount="2" falsecount="3"/>
+        <line num="13" count="0" type="stmt"/>
+        <line num="14" count="0" type="stmt"/>
+        <line num="17" count="2" type="stmt"/>
+        <line num="18" count="2" type="stmt"/>
+        <line num="20" count="0" type="stmt"/>
+        <line num="21" count="0" type="stmt"/>
+        <line num="22" count="0" type="stmt"/>
+        <line num="24" count="0" type="stmt"/>
+        <line num="25" count="0" type="stmt"/>
+        <line num="27" count="2" type="stmt"/>
+      </file>
+      <file name="search.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/search.js">
+        <metrics statements="10" coveredstatements="10" conditionals="6" coveredconditionals="5" methods="1" coveredmethods="1"/>
+        <line num="3" count="2" type="stmt"/>
+        <line num="10" count="5" type="cond" truecount="4" falsecount="0"/>
+        <line num="12" count="1" type="stmt"/>
+        <line num="13" count="1" type="stmt"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="25" count="2" type="stmt"/>
+      </file>
+      <file name="settings.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/settings.js">
+        <metrics statements="32" coveredstatements="32" conditionals="12" coveredconditionals="11" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="16" count="11" type="cond" truecount="10" falsecount="0"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="22" count="1" type="stmt"/>
+        <line num="26" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="34" count="1" type="stmt"/>
+        <line num="35" count="1" type="stmt"/>
+        <line num="36" count="1" type="stmt"/>
+        <line num="40" count="1" type="stmt"/>
+        <line num="41" count="1" type="stmt"/>
+        <line num="42" count="1" type="stmt"/>
+        <line num="47" count="1" type="stmt"/>
+        <line num="48" count="1" type="stmt"/>
+        <line num="49" count="1" type="stmt"/>
+        <line num="53" count="1" type="stmt"/>
+        <line num="54" count="1" type="stmt"/>
+        <line num="55" count="1" type="stmt"/>
+        <line num="59" count="1" type="stmt"/>
+        <line num="60" count="1" type="stmt"/>
+        <line num="61" count="1" type="stmt"/>
+        <line num="62" count="1" type="stmt"/>
+        <line num="63" count="1" type="stmt"/>
+        <line num="64" count="1" type="stmt"/>
+        <line num="65" count="1" type="stmt"/>
+        <line num="69" count="1" type="stmt"/>
+        <line num="70" count="1" type="stmt"/>
+        <line num="74" count="1" type="stmt"/>
+        <line num="75" count="1" type="stmt"/>
+        <line num="78" count="2" type="stmt"/>
+      </file>
+      <file name="signup.js" path="/home/swpp/swpp/my/sns_frontend/src/reducers/signup.js">
+        <metrics statements="13" coveredstatements="13" conditionals="8" coveredconditionals="7" methods="1" coveredmethods="1"/>
+        <line num="3" count="1" type="stmt"/>
+        <line num="11" count="7" type="cond" truecount="6" falsecount="0"/>
+        <line num="14" count="1" type="stmt"/>
+        <line num="15" count="1" type="stmt"/>
+        <line num="17" count="1" type="stmt"/>
+        <line num="18" count="1" type="stmt"/>
+        <line num="20" count="1" type="stmt"/>
+        <line num="21" count="1" type="stmt"/>
+        <line num="23" count="1" type="stmt"/>
+        <line num="24" count="1" type="stmt"/>
+        <line num="27" count="1" type="stmt"/>
+        <line num="28" count="1" type="stmt"/>
+        <line num="31" count="2" type="stmt"/>
+      </file>
+    </metrics>
+  </project>
+</coverage>

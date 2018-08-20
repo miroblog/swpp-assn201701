@@ -1,0 +1,176 @@
+import time
+import uuid
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+import urls
+
+browser = webdriver.Chrome('/usr/local/bin/chromedriver')
+#url = 'http://34.208.93.214:3000/'
+url = urls.host_url()
+
+def do_signup_duplicate_test(new_username):
+    browser.get(url)
+    time.sleep(5)
+    browser.find_element_by_id('signup_page_link').click()
+    time.sleep(5)
+	
+    time.sleep(5)
+    browser.find_element_by_id('username_field').send_keys(new_username+" ")
+#check error
+    time.sleep(5)
+    browser.find_element_by_id('username_field').send_keys(Keys.BACKSPACE)
+    time.sleep(5)
+    browser.find_element_by_id('username_field').send_keys(Keys.TAB)
+    error = "There is already a user with name "+new_username
+    time.sleep(5)
+    assert error in browser.find_element_by_id('username_field_error').text
+    time.sleep(5)
+    browser.find_element_by_id('username_field').send_keys("0")
+    time.sleep(5)
+    browser.find_element_by_id('username_field').send_keys(Keys.TAB)
+    time.sleep(5)
+    browser.find_element_by_id('signup_submit').click()
+    error = "Email is invalid"
+    assert error in browser.find_element_by_id('email_field_error').text
+
+    time.sleep(5)
+    browser.find_element_by_id('email_field').send_keys('zvzvkk')
+    time.sleep(5)
+    browser.find_element_by_id('email_field').send_keys('@gmail.com')
+    time.sleep(5)
+    browser.find_element_by_id('signup_submit').click()
+    error = "This field is required"
+    assert error in browser.find_element_by_id('password_field_error').text
+
+    time.sleep(5)
+    browser.find_element_by_id('password_field').send_keys('123')
+    time.sleep(5)
+    browser.find_element_by_id('password_confirm_field').send_keys('12')
+    time.sleep(5)
+    browser.find_element_by_id('signup_submit').click()
+    error = "Passwords must match";
+    assert error in browser.find_element_by_id('password_confirm_field_error').text
+    time.sleep(5)
+    browser.find_element_by_id('signup_submit').click()
+
+    time.sleep(5)
+    browser.find_element_by_id('password_confirm_field').send_keys('3')
+    time.sleep(5)
+    browser.find_element_by_id('signup_submit').click()
+
+    time.sleep(5)
+ # after sign up, it should be redirected to Greetings page.
+    assert browser.current_url == url
+
+
+
+def do_signup_success_test(new_username):
+    browser.get(url)
+    time.sleep(5)
+    browser.find_element_by_id('signup_page_link').click()
+    time.sleep(5)
+
+    time.sleep(5)
+    browser.find_element_by_id('username_field').send_keys(new_username)
+    time.sleep(5)
+    browser.find_element_by_id('email_field').send_keys('zvzvkk@gmail.com')
+    time.sleep(5)
+    browser.find_element_by_id('password_field').send_keys('123')
+    time.sleep(5)
+    browser.find_element_by_id('password_confirm_field').send_keys('123')
+    time.sleep(5)
+    browser.find_element_by_id('signup_submit').click()
+
+    time.sleep(5)
+    # after sign up, it should be redirected to Greetings page.
+    assert browser.current_url == url
+
+def from_login_page_to_signup_page_link():
+    browser.get(url)
+    time.sleep(5)
+    browser.find_element_by_id('login_page_link').click()
+    time.sleep(5)
+
+    # move from login to sign up
+    time.sleep(5)
+    browser.find_element_by_id('signup_page_link').click()
+    time.sleep(5)
+    # checking if the page is sign up page.
+    assert browser.current_url == (url + 'signup')
+
+def do_login_failure_test():
+    browser.get(url)
+    time.sleep(5)
+    browser.find_element_by_id('login_page_link').click()
+    time.sleep(5)
+    time.sleep(5)
+    browser.find_element_by_id('login_submit').click()
+    error = "This field is required"
+    assert error in browser.find_element_by_id('username_field_error').text
+
+    time.sleep(5)
+
+
+def do_login_success_test():
+    browser.get(url)
+    time.sleep(5)
+    browser.find_element_by_id('login_page_link').click()
+    time.sleep(5)
+
+    time.sleep(5)
+    browser.find_element_by_id('username_field').send_keys('sns_admin')
+    time.sleep(5)
+    browser.find_element_by_id('password_field').send_keys('123')
+    time.sleep(5)
+    browser.find_element_by_id('login_submit').click()
+
+    time.sleep(5)
+
+    # The page should contain 'successfully_logged_in' message.
+    assert "successfully_logged_in" in browser.find_element_by_id('success').text
+
+def do_logged_in_refresh_test():
+    browser.get(url)
+    time.sleep(5)
+    browser.find_element_by_id('login_page_link').click()
+    time.sleep(5)
+
+    # When the user is already logged in, the page should be redirected to main page with success message.
+    assert "successfully_logged_in" in browser.find_element_by_id('success').text
+
+def do_logout_test():
+    browser.get(url + 'main_page/')
+    time.sleep(5)
+    time.sleep(5)
+    browser.find_element_by_id('logout').click()
+    time.sleep(4)
+
+    # The page should be redirected to login page.
+    assert browser.current_url == (url + 'login')
+
+testid = str(uuid.uuid4());
+testid = testid[0:7]
+print("1. signup test start\n")
+do_signup_success_test(testid)
+print("success")
+
+print("2. signup duplicate test start\n")
+do_signup_duplicate_test(testid)
+print("success")
+
+from_login_page_to_signup_page_link()
+
+print("3. login failure test start\n")
+do_login_failure_test()
+print("success")
+
+print("4. login success test start\n")
+do_login_success_test()
+print("success")
+
+print("5. login success test start\n")
+do_logout_test()
+print("success")
+
+time.sleep(5)
+browser.quit()

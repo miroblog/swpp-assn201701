@@ -1,0 +1,675 @@
+import requests
+from time import sleep
+import urls
+import json
+import base64
+
+# sign_up user: success
+def sign_up_success( username, email, password ):
+    data = { 'username': username,
+            'email': email,
+            'password': password}
+    print('\n**********************\n')
+    res = requests.post( urls.userlist_url(), data, verify=False )
+    print('\n**********************\n')
+
+    if res.status_code != 201:
+        print( 'error!: {0} post fail'.format(username) )
+        exit(1)
+
+    else:
+        print( "post success: {0}".format(username) )
+
+
+# sign_up user: fail
+def sign_up_fail( username, email, password ):
+    data = { 'username': username,
+            'email': email,
+            'password': password}
+    res = requests.post( urls.userlist_url(), data , verify=False)
+
+    if res.status_code != 400:
+        print( 'error!: {0} post success'.format(username) )
+        exit(1)
+
+    else:
+        print( "post fail: {0}".format(username) )
+
+
+# delete username if exist
+def delete_user( username ):
+    # print('\n**********************\n')
+    userlist = requests.get( urls.userlist_url(), auth=( 'sns_admin', '123' ), verify=False )
+    # print('\n**********************\n')
+
+    if userlist.status_code != 200:
+        print( 'test error: sns_admin cannot get user list' )
+        exit(1)
+
+    for user in userlist.json():
+        if user['username'] == username:
+            delete = requests.delete( urls.userdetail_url( user['id'] ), auth=( 'sns_admin', '123' ), verify=False )
+
+            if delete.status_code != 204:
+                print( 'error: delete exist user {0} fail'.format( username ) )
+                exit(1)
+
+            print( 'delete user {0}'.format(username) )
+            break
+
+# delete user by normal user(fail)
+def delete_user_fail( username ):
+    userlist = requests.get( urls.userlist_url(), auth=( 'sns_admin', '123' ), verify=False )
+
+    if userlist.status_code != 200:
+        print( 'test error: sns_admin cannot get user list' )
+        exit(1)
+
+    for user in userlist.json():
+        if user['username'] == username:
+            delete = requests.delete( urls.userdetail_url( user['id'] ), auth=( username, '1234qwer' ), verify=False )
+
+            if delete.status_code == 204:
+                print( 'error: delete exist user {0} success'.format( username ) )
+                exit(1)
+
+            print( 'delete user {0} fail'.format(username) )
+            break
+
+
+# login success
+def login_success(username, password):
+    res = requests.post( urls.login_url(), auth=( username, password ), verify=False )
+    # print( res )
+
+    if res.status_code != 201:
+        print( 'error: {0} login fail'.format(username) )
+        exit(1)
+
+    print( '{0} login success'.format(username) )
+
+
+# login fail
+def login_fail(username, password):
+    res = requests.post( urls.login_url(), auth=( username, password ), verify=False )
+    # print( res )
+
+    if res.status_code != 403:
+        print( 'error: {0} login fail fail'.format(username) )
+        exit(1)
+
+    print( '{0} login fail'.format(username) )
+
+# posting success
+def posting_success(username, password, text):
+    data = {
+        'text': text
+    }
+    res = requests.post( urls.posts_url(), data, auth=( username, password ), verify=False )
+    # print ( res.json() )
+
+    if res.status_code != 200:
+        print( 'error: {0} posting fail'.format(username) )
+        exit(1)
+
+    print( '{0} posting success'.format(username) )
+    return res
+
+# posting fail by no authentication
+def posting_fail(testNum, text):
+    data = {
+        'text': text
+    }
+    res = requests.post( urls.posts_url(), data, verify=False )
+    #print ( res )
+
+    if res.status_code != 403:
+        print( 'error!: {0} post success'.format(testNum) )
+        exit(1)
+
+    else:
+        print( "posting fail: {0}".format(testNum) )
+
+# get posts success
+def get_posts(username, password, text, userNum):
+    postList = requests.get( urls.posts_url(), auth=( username, password), verify=False )
+    #print ( res )
+
+    if postList.status_code != 200:
+        print( 'test error: sns_admin cannot get user list' )
+        exit(1)
+
+    for i in range(0, userNum):
+        uname = "test" + str(i)
+        postExistFlag = False
+
+        for post in postList.json():
+            if post['user'] == uname:
+                postExistFlag = True
+
+                if post['text'] != text:
+                    print( 'error: get posts user {0} fail'.format( username ) )
+                    exit(1)
+
+                break
+
+        if postExistFlag == False:
+            print( 'error: get posts user {0} fail'.format( username ) )
+            exit(1)
+
+    print( '{0} get posts success'.format(username) )
+
+# get posts fail by no authentication
+def get_posts_fail(testNum):
+    res = requests.get( urls.posts_url(), verify=False)
+    #print ( res )
+
+    if res.status_code != 403:
+        print( 'error!: {0} get posts success'.format(testNum) )
+        exit(1)
+
+    else:
+        print( "get posts fail: {0}".format(testNum) )
+
+
+def like_post_test(auth, post_id, test_msg, error_code):
+    data = {'id': post_id,
+            'emoji': "like"}
+    res = requests.post(urls.update_like_post_url(), data, auth=auth, verify=False)
+
+    # on test fail
+    if res.status_code != error_code:
+        print('error: {0} {1} failed'.format(post_id, test_msg))
+        exit(1)
+    # on test success
+    print('post id {0}, {1} success'.format(post_id, test_msg))
+
+def like_comment_test(auth, comment_id, test_msg, error_code):
+    data = {'id': comment_id,
+            'emoji': "like"}
+    res = requests.post(urls.update_like_comment_url(), data, auth=auth, verify=False)
+
+    # on test fail
+    if res.status_code != error_code:
+        print('error: {0} {1} failed'.format(comment_id, test_msg))
+        exit(1)
+    # on test success
+    print('comment id {0}, {1} success'.format(comment_id, test_msg))
+
+
+def post_comment_test(auth, post_id, test_msg):
+    comment = 'testing comment'
+    data = {'post': post_id, 'comment': comment}
+    res = requests.post(urls.update_comment_url(), data, auth=auth, verify=False)
+    if res.status_code != 201:
+        print( 'error!: {0} {1}comment fail'.format(post_id, test_msg) )
+        exit(1)
+    else:
+        print( "comment success: {0} {1}".format(post_id, test_msg) )
+def get_comment_test(auth, post_id, test_msg):
+    comment = 'testing comment'
+    res = requests.get(urls.get_comment_url(str(post_id)), auth=auth, verify=False)
+    if res.status_code != 200:
+        print( 'error!: {0} {1}comment fail'.format(post_id,test_msg) )
+        exit(1)
+    else:
+        print( "comment success: {0} {1}".format(post_id, test_msg) )
+
+
+def post_delete_fail( auth, pk ):
+    url = urls.postdetail_url( pk )
+    res = requests.delete(url, auth=auth, verify=False)
+
+    if res.status_code != 403:
+        print( 'error!: post {0} is deleted by user {1} who is not author of the post'.format(pk, auth[0]) )
+        exit(1)
+
+    else:
+        print( 'post delete fail test success' )
+
+def post_put_fail( auth, pk ):
+    url = urls.postdetail_url( pk )
+    data = { 'text': 'revised text'}
+    res = requests.put( url, data, auth=auth, verify=False )
+
+    if res.status_code != 403:
+        print( 'error!: post {0} is putted by user {1} who is not author of the post'.format(pk, auth[0]) )
+        exit(1)
+
+    else:
+        print( 'post put fail test success' )
+
+def post_delete_success( auth, pk ):
+    url = urls.postdetail_url( pk )
+    res = requests.delete(url, auth=auth, verify=False)
+
+    if res.status_code != 204:
+        print( 'error!: post {0} is not deleted by user {1} who is the author of the post'.format(pk, auth[0]) )
+        exit(1)
+
+    else:
+        print( 'post delete success test success' )
+
+def post_put_success( auth, pk ):
+    url = urls.postdetail_url( pk )
+    data = { 'text': 'revised text'}
+    res = requests.put( url, data, auth=auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error!: post {0} is not putted by user {1} who is the author of the post'.format(pk, auth[0]) )
+        exit(1)
+
+    else:
+        print( 'post put success test success' )
+
+def get_users_success( auth ):
+    url = urls.userlist_url()
+    res = requests.get( url, auth = auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot get userlist'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} get userlist success'.format(auth[0]) )
+
+
+def get_users_fail( auth ):
+    url = urls.userlist_url()
+    res = requests.get( url, auth = auth, verify=False )
+
+    if res.status_code != 403:
+        print( 'error!: unauthenticated user {0} get userlist'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} get userlist fail success'.format(auth[0]) )
+
+def get_chat_rooms_success( auth ):
+    url = urls.chatroomlist_url()
+    res = requests.get( url, auth = auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot get chat room list'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} get chat room list success'.format(auth[0]) )
+
+
+def get_chat_rooms_fail( auth ):
+    url = urls.chatroomlist_url()
+    res = requests.get( url, auth = auth, verify=False )
+
+    if res.status_code != 403:
+        print( 'error!: unauthenticated user {0} get chat room list'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} get chat room list fail success'.format(auth[0]) )
+
+def post_chat_rooms_success( auth, user2 ):
+    url = urls.chatroomlist_url()
+    data = { 'user2': user2 }
+    res = requests.post( url, data, auth = auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot post chat room with user {1}'.format(auth[0], user2) )
+        exit(1)
+    
+    else:
+        print( 'user {0} post chat room with user {1} success'.format(auth[0], user2) )
+
+
+def post_chat_rooms_fail( auth ):
+    url = urls.chatroomlist_url()
+    data = { 'user2': 'nonExistUser' }
+    res = requests.post( url, data, auth = auth, verify=False )
+
+    if res.status_code != 500:
+        print( 'error!: user {0} post chat room with {1}'.format(auth[0], 'nonExistUser') )
+        exit(1)
+    
+    else:
+        print( 'user {0} with {1} post chat room fail success'.format(auth[0], 'nonExistUser') )
+
+def get_chat_messages_success( auth, pk ):
+    url = urls.chatroomdetail_url(pk)
+    res = requests.get( url, auth=auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot get chat room detail'.format(auth[0]) )
+        exit(1)
+
+    else:
+        print( 'user {0} get messages success'.format(auth[0]) ) 
+
+def get_chat_messages_fail( auth, pk ):
+    url = urls.chatroomdetail_url(pk)
+    res = requests.get( url, auth=auth, verify=False )
+
+    if res.status_code != 403:
+        print( 'error!: unauthencated user {0} get chat room detail'.format(auth[0]) )
+        exit(1)
+
+    else:
+        print( 'user {0} fail to get messages success'.format(auth[0]) ) 
+
+def post_chat_messages_success( auth, pk ):
+    url = urls.chatroomdetail_url(pk)
+    data={ 'text': 'test message',
+            'room': pk }
+    res = requests.post( url, data, auth=auth, verify=False )
+
+    if res.status_code != 201:
+        print( 'error!: user {0} cannot post chat message at room#{1}'.format(auth[0], str(pk)) )
+        exit(1)
+
+    else:
+        print( 'user {0} post messages success'.format(auth[0]) ) 
+
+def post_chat_messages_fail( auth, pk ):
+    url = urls.chatroomdetail_url(pk)
+    data={ 'text': 'test message',
+            'room': pk }
+    res = requests.post( url, data, auth=auth, verify=False )
+
+    if res.status_code != 403:
+        print( 'error!: unauthencated user {0} post chat messages'.format(auth[0]) )
+        exit(1)
+
+    else:
+        print( 'user {0} fail to post messages success'.format(auth[0]) ) 
+
+
+
+def get_groupchat_rooms_success( user ):
+    url = urls.groupchatroomlist_url()
+    auth = (user[0], user[2])
+    res = requests.get( url, auth = auth, verify=False )
+    data = {}
+    data = json.loads(res.text)
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot get chat room list'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} get chat room list success'.format(auth[0]) )
+    return data[0]['id']
+
+
+def post_groupchat_rooms_success( users ):
+    url = urls.groupchatroomlist_url()
+    auth = (users[0][0], users[0][2])
+    data = {}
+    for i in range(1,len(users)):
+        data['user'+str(i)] = users[i][0]
+        json.dumps(data)
+    res = requests.post( url, data, auth = auth, verify=False )
+
+    if res.status_code != 201:
+        print( 'error!: user {0} cannot post chat room with users'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} post chat room with users success'.format(auth[0]) )
+
+def addusers_groupchat_rooms_success( users , auth, roomid):
+    url = urls.groupchatroomlist_url()
+    data = {}
+    data['roomid']=roomid
+    json.dumps(data)
+    for i in range(0,len(users)):
+        data['user'+str(i+1)] = users[i][0]
+        json.dumps(data)
+    res = requests.post( url, data, auth = auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot post chat room with users'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} added new users by posting success'.format(auth[0]) )
+
+def exit_groupchat_rooms_success( roomid, auth ):
+    url = urls.groupchatroomlist_url()
+    data = {}
+    data['roomid']=roomid
+    json.dumps(data)
+    data['delete']=True
+    json.dumps(data)
+    res = requests.post( url, data, auth = auth, verify=False )
+
+    if res.status_code != 202:
+        print( 'error!: user {0} failed in exit chatting room'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} exit chatting room success'.format(auth[0]) )
+    
+
+def get_groupchat_messages_success( auth, pk ):
+    url = urls.groupchatroomdetail_url(pk)
+    res = requests.get( url, auth=auth, verify=False )
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot get group chat room detail'.format(auth[0]) )
+        exit(1)
+
+    else:
+        print( 'user {0} get group messages success'.format(auth[0]) ) 
+
+def post_groupchat_messages_success( auth, pk ):
+    url = urls.groupchatroomdetail_url(pk)
+    data={ 'text': 'test message',
+            'room': pk }
+    res = requests.post( url, data, auth=auth, verify=False )
+
+    if res.status_code != 201:
+        print( 'error!: user {0} cannot post chat message at room#{1}'.format(auth[0], str(pk)) )
+        exit(1)
+
+    else:
+        print( 'user {0} post messages success'.format(auth[0]) ) 
+
+## added poll
+def post_wall_poll_success( auth, name, text ):
+    url = urls.wall_url(name)
+    poll_data = '{"question":"what is your favorite food","options":["pizza","cola","orange","mandu","pringles"]}'
+    data = { 'text': text, 'poll_data':poll_data}
+    res = requests.post( url, data, auth=auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error: {0} cannot post poll on {1}\'s wall'.format( auth[0], name ) )
+        exit(1)
+
+    print( 'success: {0} successfully post poll on {1}\'s wall'.format( auth[0], name ) )
+
+def post_wall_poll_fail( auth, name, text ):
+    url = urls.wall_url(name)
+    poll_data = '{"question":"what is your favorite food","options":["pizza","cola","orange","mandu","pringles"]}'
+    data = { 'text': text, 'poll_data':poll_data}
+    print('\n**********************\n')
+    res = requests.post( url, data, auth=auth, verify=False )
+    print('\n**********************\n')
+
+    if res.status_code != 403:
+        print( 'error: {0} successfully post poll on {1}\'s wall'.format( auth[0], name ) )
+        exit(1)
+
+    print( 'success: {0} cannot post poll on {1}\'s wall'.format( auth[0], name ) )
+
+def vote_poll_success(auth, name, poll_id, option_id):
+    url = urls.vote_url()
+    data = {'poll_id':poll_id, 'option_id':option_id}
+    res = requests.post(url, data, auth=auth, verify=False)
+    if res.status_code != 200:
+        print( 'error: {0} vote poll on {1}\'s wall'.format( auth[0], name ) )
+        exit(1)
+
+    print( 'success: {0} successfully voted poll on {1}\'s wall'.format( auth[0], name ))
+
+## end added poll
+
+def post_wall_success( auth, name, text ):
+    url = urls.wall_url(name)
+    data = { 'text': text }
+    res = requests.post( url, data, auth=auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error: {0} cannot post on {1}\'s wall'.format( auth[0], name ) )
+        exit(1)
+
+    print( 'success: {0} successfully post on {1}\'s wall'.format( auth[0], name ) )
+
+def post_wall_fail( auth, name, text ):
+    url = urls.wall_url(name)
+    data = { 'text': text }
+    res = requests.post( url, data, auth=auth, verify=False )
+
+    if res.status_code != 403:
+        print( 'error: {0} successfully post on {1}\'s wall'.format( auth[0], name ) )
+        exit(1)
+
+    print( 'success: {0} cannot post on {1}\'s wall'.format( auth[0], name ) )
+
+def get_wall_posts_success(auth, name):
+    url = urls.wall_url(name)
+    res = requests.get(url, auth=auth, verify=False)
+    if res.status_code != 200:
+        print( 'get {0} wall\'s posts test success - fail'.format(name))
+        exit(1)
+
+    else:
+        print( 'get {0} wall\'s posts test success - success '.format(name))
+
+def get_wall_posts_fail(auth, name):
+    url = urls.wall_url(name)
+    # send without the auth
+    res = requests.get(url, auth=auth, verify=False)
+    if res.status_code != 403:
+        print( 'get {0} wall\'s posts test fail - fail'.format(name))
+        exit(1)
+
+    else:
+        print( 'get {0} wall\'s posts test fail - success'.format(name))
+
+def post_image_success( auth ):
+    url = urls.userphoto_url()
+
+    image = { 'photo': open('./test_image.JPG', 'rb') }
+    res = requests.post( url, files=image, auth=auth, verify=False )
+
+    if res.status_code != 200:
+        print('post image success fail')
+        exit(1)
+
+    print( 'post image success - success' )
+
+def put_email_success( auth ):
+    userlist = requests.get( urls.userlist_url(), auth=('sns_admin', '123'), verify=False )
+    data = { 'email': 'changed@email.com' }
+    for user in userlist.json():
+        if user['username'] == auth[0]:
+            pk = user['id']
+            break
+
+    url = urls.user_email_url(pk)
+
+    res = requests.put( url, data=data, auth=auth, verify=False)
+
+    if res.status_code != 200:
+        print( 'error: {0} put his/her email fail'.format(auth[0]) )
+        exit(1)
+
+    print( 'put email success' )
+
+def put_password_success( auth ):
+    userlist = requests.get( urls.userlist_url(), auth=('sns_admin', '123'), verify=False )
+    for user in userlist.json():
+        if user['username'] == auth[0]:
+            pk = user['id']
+            break
+
+    url = urls.user_password_url(pk)
+
+    data = { 'old_password': auth[1],
+            'new_password': 'qwer1234' }
+    res = requests.put( url, data=data, auth=auth, verify=False )
+
+    if res.status_code != 200:
+        print( 'error: {0} put his/her pwd fail'.format(auth[0]) )
+        exit(1)
+
+    print('put password success')
+
+def post_friendrequest( auth, user ):
+    url = urls.friendrequest_list_url()
+    data = { 'user':user}
+    res = requests.post( url, data, auth = auth, verify=False )
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot post friendrequest'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} post friendrequest to {1} success'.format(auth[0], user) )
+
+def get_friendrequest( auth, user ):
+    url = urls.friendrequest_list_url()
+    res = requests.get( url,  auth = auth, verify=False )
+    data = json.loads(res.text)
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot get friendrequest'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} get friendrequests success'.format(auth[0]))
+        return data[0]['id']
+
+def delete_friendrequest( auth, id ):
+    url = urls.friendrequest_detail_url(id)
+    res = requests.delete( url,  auth = auth, verify=False )
+
+    if res.status_code != 204:
+        print( 'error!: user {0} cannot delete friendrequest'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} delete friendrequest success'.format(auth[0]) )
+
+def accept_friendrequest( auth, id ):
+    url = urls.friendrequest_detail_url(id)
+    data = { 'status':1}
+    res = requests.patch( url, data, auth = auth, verify=False )
+    if res.status_code != 200:
+        print( 'user {0} cannot accept request'.format(auth[0]) )
+    
+    else:
+        print( 'user {0} accept request success'.format(auth[0]) )
+def get_myfriend( auth):
+    url = urls.myfriend_list_url()
+    res = requests.get( url,  auth = auth, verify=False )
+    data = json.loads(res.text)
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot get myfriend list'.format(auth[0]) )
+        exit(1)
+    
+    else:
+        print( 'user {0} get myfriend list success'.format(auth[0]))
+        return data[0]['id']
+
+def delete_myfriend(auth, user, id):
+    url = urls.myfriend_detail_url(id)
+    data = {'user':user}
+    res = requests.patch(url, data=data, auth=auth, verify=False)
+    if res.status_code != 200:
+        print( 'error!: user {0} cannot unfriend with {1}'.format(auth[0], user) )
+        exit(1)
+    
+    else:
+        print( 'user {0} unfriend with {1} by updating list'.format(auth[0], user))
+
+def get_friends_success( auth ):
+    url = urls.friends_url()
+    res = requests.get( url, auth=auth, verify=False )
+
+    return res
