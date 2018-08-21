@@ -2,9 +2,13 @@
 Calendargram  
 Frontend : React & Redux + Saga  
 Backend : Django  
+```python
+# Backend
+python manage.py runserver
+# Frontend
+npm start
+```
 
-## Backend: python manage.py runserver
-## Frontend: npm start
 
 [Docs](https://github.com/miroblog/swpp-assn201701/blob/master/Description(docx)/SWPP_REPORT_TEAM2.pdf)
 
