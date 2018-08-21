@@ -9,6 +9,7 @@ python manage.py runserver
 npm start
 ```
 
+기능 및 세부사항
 
 [Docs](https://github.com/miroblog/swpp-assn201701/blob/master/Description(docx)/SWPP_REPORT_TEAM2.pdf)
 
